@@ -4,15 +4,23 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import CloseIcon from '@mui/icons-material/Close';
 import { AiOutlineUser } from "react-icons/ai";
 import { RxCube } from 'react-icons/rx';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { logout } from '../../../Redux/Auth/Action';
+import { useDispatch } from 'react-redux';
+import  { toast,Toaster } from 'react-hot-toast';
+
 const buttonStyles = "bg-blue-500 text-white p-2 rounded";
 const iconStyles = "w-[30px] mr-4 rounded-full";
 const titleStyles = "font-bold text-black";
 const descriptionStyles = " text-zinc-600";
 
 const RightModal = ({ open, toggleModal }) => {
+  const jwt=localStorage.getItem("jwt");
+  const navigate=useNavigate();
+const dispatch=useDispatch();
   return (
     <Drawer anchor="right" open={open} onClose={toggleModal}>
+      <Toaster/>
       <div className="w-80">
         <div className="bg-red-600 text-white p-4 flex justify-between items-center">
           <div className="flex items-center">
@@ -37,14 +45,27 @@ const RightModal = ({ open, toggleModal }) => {
             }
           />
           <Divider />
-          <Link to="/sign-in">
+          {jwt?<div onClick={()=>{
+            dispatch(logout())
+            toast.success("Logout Successfully")
+            navigate("/")
+            window.location.reload()
+            }}>
+            <CustomListItem
+            imageSrc="/button.svg"
+            altText="Log out"
+            title="Log Out"
+            // description="with Target or OnePass account."
+          />
+          </div>:<Link to="/sign-in">
           <CustomListItem
             imageSrc="/button.svg"
             altText="Log in"
             title="Log in"
             description="with Target or OnePass account."
           />
-          </Link>
+          </Link> }
+          
           <Divider />
           <CustomListItem
           icon={<RxCube className={iconStyles} />}

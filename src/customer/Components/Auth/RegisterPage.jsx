@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { register } from '../../../Redux/Auth/Action';
-import { Toaster } from 'react-hot-toast';
-import styled from 'styled-components';
+import  {toast, Toaster } from 'react-hot-toast';
 import { MdOutlineEmail } from 'react-icons/md';
 import { SlBasket } from 'react-icons/sl';
 import { RxCube } from 'react-icons/rx';
 import { FaRegHeart } from 'react-icons/fa';
 import { BsArrowLeft } from 'react-icons/bs';
-import { Link ,useLocation} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import NewNavbar from '../Navbar/NewNavbar';
 
 const inputClasses = "w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500";
 const textClasses = "text-zinc-700 dark:text-zinc-300";
@@ -19,7 +19,7 @@ const textColorClasses = 'text-zinc-700';
 const smallTextClasses = 'text-xs text-zinc-600';
 const containerClasses = 'bg-zinc-200 p-6 rounded-lg w-full';
 const centerClass = 'text-center';
-const listClasses = 'space-y-4';
+const listClasses = 'space-y-6 mt-4';
 const listItemClasses = 'flex items-start';
 const fontBoldClasses = 'font-semibold';
 
@@ -32,7 +32,8 @@ const RegisterPage = () => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [errors, setErrors] = useState({});
     const dispatch = useDispatch();
-    const location = useLocation();
+    const navigate = useNavigate();
+
     const handlePasswordVisibilityToggle = () => {
         setShowPassword(!showPassword);
     };
@@ -52,32 +53,23 @@ const RegisterPage = () => {
             const userData = { firstName, lastName, phoneNumber, email, password };
 
             try {
-                await dispatch(register(userData));
+                await dispatch(register(userData,navigate,toast));
+                // navigate("/sign-in");
             } catch (error) {
                 console.error(error);
             }
         }
     };
-console.log(location)
+
     return (
         <>
-            <div className="flex items-center justify-start p-4 border-b gap-[40%]">
-                <Link to="/">
-                <div className="flex items-center space-x-2">
-                    {/* <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"></path>
-                    </svg> */}
-                    <BsArrowLeft/>
-                    <span className="font-bold">Back</span>
-                </div>
-                </Link>
-                <div className="relative">
-                    <img src="https://www.target.com.au/medias/auth0/target.svg" alt="Target" />
-                </div>
-            </div>
-            <div className="flex items-stretch justify-center m-auto gap-4 p-6">
+           
+            <NewNavbar />
+            <div className="flex flex-col items-stretch justify-center m-auto gap-4 p-6 md:flex-row">
                 <div className="flex-1">
                     <SignUpForm
+                        email={email}
+                        password={password}
                         showPassword={showPassword}
                         handlePasswordVisibilityToggle={handlePasswordVisibilityToggle}
                         handleSubmit={handleSubmit}
@@ -98,7 +90,7 @@ console.log(location)
     );
 };
 
-const SignUpForm = ({ showPassword, handlePasswordVisibilityToggle, handleSubmit, setEmail, setFirstName, setLastName, setPassword, setPhoneNumber, errors }) => {
+const SignUpForm = ({ email, password, showPassword, handlePasswordVisibilityToggle, handleSubmit, setEmail, setFirstName, setLastName, setPassword, setPhoneNumber, errors }) => {
     return (
         <div className="p-6 bg-white dark:bg-zinc-900 rounded-lg h-full">
             <h2 className="text-2xl font-bold mb-6 text-zinc-900 dark:text-zinc-100">Create an account</h2>
@@ -157,7 +149,7 @@ const SignUpForm = ({ showPassword, handlePasswordVisibilityToggle, handleSubmit
                         placeholder="Password"
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                    <button type="button" className="absolute right-3 top-9 text-blue-500" onClick={handlePasswordVisibilityToggle}>
+                    <button type="button" className="absolute right-3 top-9 text-black" onClick={handlePasswordVisibilityToggle}>
                         {showPassword ? 'Hide' : 'Show'}
                     </button>
                     {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
@@ -169,16 +161,16 @@ const SignUpForm = ({ showPassword, handlePasswordVisibilityToggle, handleSubmit
                     </label>
                 </div>
                 <p className={`text-sm ${textClasses} mb-4`}>By signing up, you agree to our <a href="#" className={linkClasses}>Conditions of Use</a> and <a href="#" className={linkClasses}>Privacy Policy</a>.</p>
-                <button type="submit" className="w-full py-2 bg-zinc-500 text-white rounded-md text-lg">Join Now</button>
+                <button type="submit" className={`w-full py-2 ${email && password ? "bg-red-500" : 'bg-zinc-500 cursor-not-allowed opacity-50'} text-white rounded-full text-lg`}>Join Now</button>
             </form>
-            <p className="text-center text-zinc-700 dark:text-zinc-300 mt-4">Already have an account? <a href="#" className={linkClasses}>Log in here</a></p>
+            <p className="text-center text-zinc-700 dark:text-zinc-300 mt-4">Already have an account? <Link to="/sign-in" className={linkClasses}>Log in here</Link></p>
         </div>
     );
 };
 
 const SignUpComponent = () => {
     return (
-        <div className={`${containerClasses} h-full`}>
+        <div className={`${containerClasses} mt-4 h-full`}>
             <div>
                 <p className={fontBoldClasses}>Enjoy access to:</p>
                 <ul className={listClasses}>

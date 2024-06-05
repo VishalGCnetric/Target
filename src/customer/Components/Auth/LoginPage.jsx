@@ -1,24 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { login } from '../../../Redux/Auth/Action';
 import { Toaster, toast } from 'react-hot-toast';
-import { RxCube } from 'react-icons/rx';
-import { SlBasket } from 'react-icons/sl';
-import { MdOutlineEmail } from 'react-icons/md';
-import { FaRegHeart } from 'react-icons/fa6';
 import { BsArrowLeft } from "react-icons/bs";
-
-// Shared Tailwind CSS classes
-const buttonClasses = 'bg-black text-white py-2 px-4 rounded-full';
-const iconClasses = 'w-6 h-6 mr-3 mt-1';
-const textColorClasses = 'text-zinc-700';
-const smallTextClasses = 'text-xs text-zinc-600';
-const containerClasses = 'bg-zinc-200 p-6 rounded-lg w-full';
-const centerClasses = 'text-center';
-const listClasses = 'space-y-4';
-const listItemClasses = 'flex items-start';
-const fontBoldClasses = 'font-semibold';
+import NewNavbar from '../Navbar/NewNavbar';
+import { MdOutlineEmail } from 'react-icons/md';
+import { SlBasket } from 'react-icons/sl';
+import { RxCube } from 'react-icons/rx';
+import { FaRegHeart } from 'react-icons/fa';
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -26,9 +16,13 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({});
     const dispatch = useDispatch();
-    const jwt = localStorage.getItem('jwt');
-    const navigate = useNavigate();
-
+    const jwt=localStorage.getItem('jwt');
+    useEffect(() => {
+        if(jwt){
+            navigate('/');
+        }
+    }, [jwt]);
+const navigate = useNavigate();
     const handleSubmit = async (event) => {
         event.preventDefault();
         const errors = {};
@@ -41,21 +35,10 @@ const Login = () => {
         setErrors(errors);
 
         if (Object.keys(errors).length === 0) {
-            try {
-                await dispatch(login({ email, password }, navigate, toast));
-                navigate('/');
-            } catch (error) {
-                console.error(error);
-                toast.error('Failed to login. Please try again.');
-            }
+            // Dispatch the login action with necessary parameters
+            dispatch(login({ email, password }, navigate, toast));
         }
     };
-
-    useEffect(() => {
-        if (jwt) {
-            navigate('/');
-        }
-    }, [jwt, navigate]);
 
     const handlePasswordVisibilityToggle = () => {
         setShowPassword(!showPassword);
@@ -63,28 +46,13 @@ const Login = () => {
 
     return (
         <>
-            <div className="flex items-center justify-start mb-2 gap-[40%]">
-                <div className="flex items-center space-x-2">
-                    {/* <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"></path>
-                    </svg> */}
-                    <BsArrowLeft/>
-                    <span className="font-bold">Back</span>
-                </div>
-                <div className="relative">
-                    <img src="https://www.target.com.au/medias/auth0/target.svg" alt="Target" />
-                </div>
-            </div>
-            <div className="flex items-stretch justify-center m-auto gap-4 p-6">
-                <div className="flex-1">
+            <Toaster />
+            <NewNavbar />
+            <div className="flex flex-col md:flex-row items-stretch justify-center m-auto gap-4 p-6">
+                <div className="flex-1 md:w-1/2">
                     <LoginForm
+                        email={email}
+                        password={password}
                         handleSubmit={handleSubmit}
                         setEmail={setEmail}
                         setPassword={setPassword}
@@ -93,11 +61,10 @@ const Login = () => {
                         errors={errors}
                     />
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 md:w-1/2">
                     <SignUpComponent />
                 </div>
             </div>
-            <Toaster />
         </>
     );
 };
@@ -108,11 +75,13 @@ const inputClass = 'mt-1 block w-full p-2 border border-zinc-300 rounded-md';
 const buttonClass = 'text-sm leading-5';
 const linkClass = 'text-sm text-zinc-600 hover:underline';
 const primaryButtonClass = 'w-full py-2 bg-zinc-300 text-zinc-700 rounded-md font-semibold';
-const secondaryButtonClass = 'w-full py-2 bg-purple-600 text-white rounded-md font-semibold';
+const secondaryButtonClass = 'w-full py-2 bg-purple-600 text-white rounded-full font-semibold';
 const hrClass = 'flex-grow border-t border-zinc-300';
 const orTextClass = 'mx-2 text-sm text-zinc-600';
 
 const LoginForm = ({
+    email,
+    password,
     handleSubmit,
     setEmail,
     setPassword,
@@ -121,7 +90,7 @@ const LoginForm = ({
     errors,
 }) => {
     return (
-        <div className="p-6 bg-white dark:bg-zinc-900 rounded-lg h-full">
+        <div className="p-6 bg-white dark:bg-zinc-900 rounded-lg">
             <h1 className="text-2xl font-bold mb-6">Welcome back!</h1>
             <form className="space-y-4" onSubmit={handleSubmit}>
                 <div>
@@ -156,7 +125,7 @@ const LoginForm = ({
                             className="absolute inset-y-0 right-0 pr-3 flex items-center {buttonClass}"
                             onClick={handlePasswordVisibilityToggle}
                         >
-                            {showPassword ? 'Hide' : 'Show'}
+                            {/* {showPassword ? 'Hide' : 'Show'} */}
                         </button>
                     </div>
                     {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
@@ -167,7 +136,7 @@ const LoginForm = ({
                     </a>
                 </div>
                 <div>
-                    <button type="submit"className="w-full py-2 bg-zinc-500 text-white rounded-md text-lg">
+                    <button type="submit" className={`w-full py-2 ${email && password ? "bg-red-500" : 'bg-zinc-500 cursor-not-allowed opacity-50'} text-white rounded-full text-lg`}>
                         Log in with Target
                     </button>
                 </div>
@@ -200,56 +169,55 @@ const LoginForm = ({
 
 const SignUpComponent = () => {
     return (
-        <div className={`${containerClasses} h-full`}>
-            <div className={centerClasses}>
-                <p className={`${fontBoldClasses} text-lg`}>Don't have an account?</p>
+        <div className="bg-zinc-200 p-6 rounded-lg h-full">
+            <div className="text-center">
+                <p className="font-semibold text-lg">Don't have an account?</p>
                 <Link to="/sign-up">
-                    <button className={`${buttonClasses} mt-2`}>Create Account</button>
+                    <button className="bg-black text-white py-2 px-4 rounded-full mt-2">Create Account</button>
                 </Link>
             </div>
-            <div>
-                <p className={fontBoldClasses}>Enjoy access to:</p>
-                <ul className={listClasses}>
+            <div className="mt-6">
+                <p className="font-semibold">Enjoy access to:</p>
+                <ul className="space-y-6 mt-4">
                     <FeatureItem
-                        icon={<FaRegHeart className={iconClasses} />}
+                        icon={<FaRegHeart className="w-6 h-6 mr-3 mt-1" />}
                         title="$10 off online!^"
                         description="Get $10 off your next $50+ online shop when you opt into marketing."
                     />
                     <FeatureItem
-                        icon={<RxCube className={iconClasses} />}
+                        icon={<RxCube className="w-6 h-6 mr-3 mt-1" />}
                         title="Detailed Order Tracking"
                         description="Get updates on the progress of your order and see all your past purchases."
                     />
                     <FeatureItem
-                        icon={<SlBasket className={iconClasses} />}
+                        icon={<SlBasket className="w-6 h-6 mr-3 mt-1" />}
                         title="Faster Checkout"
                         description="We'll remember and pre-fill your details every time you shop online."
                     />
                     <FeatureItem
-                        icon={<MdOutlineEmail className={iconClasses} />}
-                        title="Latest Deals and Products"
-                        description="Never miss a promotion, the latest products or exclusive offers when you opt into marketing."
-                    />
-                </ul>
-                <p className={`${smallTextClasses} mt-6`}>
-                    ^Offer available to new marketing opt-ins only. E-Voucher promo code sent via
-                    your Welcome Email. Code is single-use only and not redeemable for cash. Cannot
-                    be used with any other promo code. Excludes Clearance.
-                </p>
-            </div>
-        </div>
-    );
+Item
+icon={<MdOutlineEmail className="w-6 h-6 mr-3 mt-1" />}
+title="Latest Deals and Products"
+description="Never miss a promotion, the latest products or exclusive offers when you opt into marketing."
+/>
+</ul>
+<p className="text-xs mt-6">
+^Offer available to new marketing opt-ins only. E-Voucher promo code sent via
+your Welcome Email. Code is single-use only and not redeemable for cash. Cannot
+be used with any other promo code. Excludes Clearance.
+</p>
+</div>
+</div>
+);
 };
 
 const FeatureItem = ({ icon, title, description }) => (
-    <li className={
-        `${listItemClasses}`}>
-        <div>{icon}</div>
-        <div>
-            <p className={fontBoldClasses}>{title}</p>
-            <p className={`${fontBoldClasses} ${textColorClasses}`}>{description}</p>
-        </div>
-    </li>
+<li className="flex items-start">
+<div>{icon}</div>
+<div>
+<p className="font-semibold">{title}</p>
+<p className="font-semibold text-zinc-700">{description}</p>
+</div>
+</li>
 );
 
-// export default Login;

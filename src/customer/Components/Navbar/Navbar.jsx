@@ -2,7 +2,7 @@ import { useState } from "react";
 import { data } from "./categorydata";
 import Collapse from '@mui/material/Collapse';
 
-const Navbar = () => {
+const Navbar = ({scrolled}) => {
   const [hoveredCategory, setHoveredCategory] = useState(null);
 
   const handleMouseEnter = (category) => {

@@ -8,6 +8,7 @@ import CartFooter from "./CartFooter";
 import HomeCarousel from "../Carousel/HomeCarousel";
 import PaymentOptions from "../footer/PaymentOption";
 import { BsArrowLeft } from "react-icons/bs";
+import NewNavbar from "../Navbar/NewNavbar";
 
 const SingleProduct = {
   id: 1,
@@ -68,25 +69,17 @@ const Cart = () => {
 
   return (
     <div className="">
-      <div className="flex items-center justify-start mb-4 gap-[40%]">
+      <NewNavbar/>
+      {/* <div className="flex items-center justify-start mb-4 gap-[40%]">
         <div className="flex items-center space-x-2">
-          {/* <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"></path>
-          </svg> */}
+          
           <BsArrowLeft/>
           <span className="font-bold">Back</span>
         </div>
         <div className="relative">
           <img src="https://www.target.com.au/medias/auth0/target.svg" alt="Target" />
         </div>
-      </div>
+      </div> */}
       {CartData.length > 0 && (
         <div className=" lg:grid grid-cols-5 lg:px-16 relative">
           <div className="  lg:col-span-3 lg:px-5 bg-white">

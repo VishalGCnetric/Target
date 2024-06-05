@@ -183,7 +183,7 @@ const [scrolledHover, setScrolledHover] = useState(false);
       <header
        className={` w-full bg-white ${
         scrolled
-          ? "fixed top-0 backdrop-blur-md bg-opacity-70 shadow-md"
+          ? "fixed top-0 backdrop-blur-md bg-opacity-70 shadow-md hover:bg-white"
           : "bg-opacity-100"
       } transition-all duration-300 z-50`}
       onMouseEnter={() => setScrolledHover(true)}
@@ -291,7 +291,7 @@ const [scrolledHover, setScrolledHover] = useState(false);
          
         </nav>
         {scrolled  ? null:  <Navbar />}
-      {scrolled && scrolledHover?<Navbar /> : null}
+      {scrolled && scrolledHover?<Navbar scrolled={scrolled}/> : null}
       </header>
       
     </div>

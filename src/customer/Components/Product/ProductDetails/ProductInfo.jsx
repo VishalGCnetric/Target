@@ -4,10 +4,10 @@ import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 // Shared Tailwind CSS classes
 const sharedClass = "text-zinc-900 dark:text-zinc-100";
 
-const ProductInfo = () => {
+const ProductInfo = ({des}) => {
     const productData = {
       deliveryOptions: {
-        description: "Please make a selection above to see stock availability.",
+        description: des,
         notice: "NOTICE: Click & Collect and delivery timeframes and fees are subject to availability and apply to this individual product only.",
         linkText: "Find out more",
         itemCode: "69284557"
@@ -23,7 +23,7 @@ const ProductInfo = () => {
         "Two-way zip front",
         "Covered feet"
       ],
-      details: "Give your little one the comfort and style with our Cosy Baby's Zip Access Organic Cotton Coverall. Crafted from soft organic cotton, its regular fit and all-over print make your baby stand out. The round neck and long raglan sleeves provide freedom of movement, while the fold-over mittens and two-way zip front add practicality. Keep your baby snug with the covered feet feature. Give your baby the best with our premium coverall.",
+      details:des,
       materials: "Cotton/Elastane",
       careInstructions: "Machine washable",
       extraInfo: "Our organic cotton range is made with certified organic cotton. Grown without the use of harmful chemicals and in a way that builds healthy soil and ecosystems."

@@ -214,3 +214,7 @@ const FeatureItem = ({ icon, title, description }) => (
 );
 
 export default RegisterPage;
+
+
+
+

@@ -75,6 +75,7 @@ export const receiveProductsById = (id) => {
           //   type: "ACTUAL_PRODUCTS",
           //   products: data.products,
           // });
+          // console.log("this is product details response", response);
           resolve(response.data);
           // console.log("this is product details response", response);
         }
